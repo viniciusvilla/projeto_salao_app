@@ -1,4 +1,4 @@
-//_layout.tsx
+// app/(tabs)/_layout.tsx
 
 import { Tabs } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome'
@@ -20,9 +20,11 @@ export default function TabLayout(){
                 }}
             />
 
-            {/* Cria a opção "Início" clicavel que fica na parte inferior */}
+            {/* Cria a opção "Agenda" clicavel que fica na parte inferior */}
+            {/*No caso, esse código abaixo seria a Tab "Agenda", e nessa tab que eu gostaria que os serviços agendados */}
             <Tabs.Screen
-                name = "agendamentos"
+                /*Agora resolveu? */
+                name = "agenda"
                 options = {{
                     title: 'Agenda',
                     tabBarIcon: ({color}) => <FontAwesome

@@ -1,3 +1,5 @@
+
+
 //Botão que criei para ser o botão padrão do sistema, para evitar repetição de código do mesmo botão nos arquivos
 
 import { Pressable, View, Text, StyleSheet } from "react-native"

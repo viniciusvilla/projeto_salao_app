@@ -1,3 +1,4 @@
+//service/[id].tsx
 //Tela de quando seleciona um dos serviços
 
 import { router, Stack, useLocalSearchParams } from "expo-router"
@@ -6,6 +7,8 @@ import { Picker } from "@react-native-picker/picker"
 import { useState } from "react"
 import { Button } from "../../components/button"
 import { getServiceById } from "../../services/service"
+
+import { useAgendamento } from "../../context/agendamento_context";
 
 
 //Vetores utilizados para registrar profissionais / dias da semana / horários
@@ -19,6 +22,7 @@ export default function Screen() {
   const { id } = useLocalSearchParams()
   const idService = parseInt(id as string)
   const service = getServiceById(idService)
+  const { addAgendamento } = useAgendamento();
 
   //funções que fazem a ação de selecionar as opções e armazenam as escolhas do usúario.
   const [profissionalSelecionado, setProfissionalSelecionado] = useState(profissionais[0])
@@ -36,7 +40,17 @@ export default function Screen() {
       return
     }
 
+    //Agendando o serviço em context/agendamento_context.tsx
+    addAgendamento({
+    id: Date.now(), // Gera id temporário único
+    servico: service.title,
+    profissional: profissionalSelecionado,
+    dia: diaSelecionado,
+    horario: horarioSelecionado,
+  });
+
     alert(`Agendado com ${profissionalSelecionado} na ${diaSelecionado} às ${horarioSelecionado}`)
+    
   }
 
   return (

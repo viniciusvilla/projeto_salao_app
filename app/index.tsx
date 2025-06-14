@@ -7,14 +7,14 @@ import { useState } from 'react'
 
 export default function Screen(){
 
-    //Função que redireciona para a tela Início
+    //Função que redireciona para a tela Início.
     const handleStart = () =>{
         router.replace('/home')
     }
 
-    //Função que redireciona para a tela Cadastro, porém ainda não criei essa tela
+    //Função que redireciona para a tela Cadastro.
     const cadastrarPress = () =>{
-        router.replace('/cadastro') 
+        router.push('/cadastro') 
     }
 
     //Dentro de email e senha estão os valores do input

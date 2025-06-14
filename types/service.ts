@@ -7,3 +7,4 @@ export type Service = {
     description: string,
     price: number
 }
+
