@@ -4,10 +4,17 @@
 //               === Ela carrega automaticamente o arquivo (tabs)/_layout.tsx
 //               === Dentro dela ficam as telas como "home" e "agendamentos"
 // service/[id]  === Rota dinâmica para exibir os detalhes de um serviço (ex: /service/2)
+import { useEffect } from 'react';
+import {Stack} from 'expo-router';
+import { createTables } from '../database/schema';
 
-import {Stack} from 'expo-router'
 
 export default function RootLayout(){
+    
+    useEffect(() => {
+        createTables();
+    }, []);
+
     return (
         <Stack screenOptions = {{headerShown: false}}>
             <Stack.Screen name = "index"/>

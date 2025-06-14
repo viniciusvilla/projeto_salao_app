@@ -1,14 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useEffect } from 'react';
-import { createTables } from './app/database/schema';
+import { createTables } from './database/schema';
 
 
 export default function App() {
   // Chama a criação das tabelas quando o app inicia
   useEffect(() => {
-    createTables();
-  }, []);
+  const init = async () => {
+    try {
+      await createTables();
+    } catch (err) {
+      console.log('❌ Erro ao iniciar banco de dados:', err);
+    }
+  };
+
+  init();
+}, []);
 
   return (
     <View style={styles.container}>
