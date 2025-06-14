@@ -21,9 +21,7 @@ export default function TabLayout(){
             />
 
             {/* Cria a opção "Agenda" clicavel que fica na parte inferior */}
-            {/*No caso, esse código abaixo seria a Tab "Agenda", e nessa tab que eu gostaria que os serviços agendados */}
             <Tabs.Screen
-                /*Agora resolveu? */
                 name = "agenda"
                 options = {{
                     title: 'Agenda',
