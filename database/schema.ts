@@ -14,6 +14,10 @@ export const createTables = async () => {
         senha TEXT
       );
     `);
+    // Adiciona colunas extras se ainda não existirem
+    await db.execAsync(`ALTER TABLE usuarios ADD COLUMN tipo TEXT DEFAULT 'usuario';`).catch(() => {});
+    //await db.execAsync(`ALTER TABLE usuarios ADD COLUMN imagem TEXT;`).catch(() => {});
+
 
     // ✅ Nova tabela de agendamentos
     await db.execAsync(`
