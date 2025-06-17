@@ -35,7 +35,7 @@ export default function AgendaScreen() {
           <View key={ag.id} style={styles.card}>
             <Text style={styles.servico}>{ag.servico}</Text>
             <Text>Profissional: {ag.profissional}</Text>
-            <Text>Dia da Semana: {ag.dia}</Text>
+            <Text>Dia da Semana: {ag.data}</Text>
             <Text>Horário: {ag.horario}</Text>
 
             <View style={styles.buttonArea}>

@@ -19,8 +19,10 @@ E para acessar esses dados, nos usamos um Hook (Gancho) que acessa valores globa
 
 */
 
-import { createContext, useState, useContext, ReactNode } from "react"
+import { createContext, useState, useContext, ReactNode, useEffect } from "react"
 import { Agendamento } from "../types/agendamento"
+import { listarAgendamentos, salvarAgendamento, removerAgendamentoPorId } from '../database/database';
+
 
 //Quando a pessoa marca um serviço, ele é salvo no vetor do type abaixo, no type se encontra as funçòes que irão adicionar e remover os serviços do vetor Agendamento[]
 type AgendamentoContextData = {
@@ -34,29 +36,60 @@ const AgendamentoContext = createContext<AgendamentoContextData>({} as Agendamen
 
 //Aqui é criado um componente que vai encapsular as Stacks e fornecer o contexto para os componentes filhos. (O Encapsulamento pode ser vizualizado em: app/_layout)
 export const AgendamentoProvider = ({ children }: { children: ReactNode }) => {
-  //Abaixo está fazendo oque comentei anteriormente, está marcando e desmarcando serviços do usúario.
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([])
 
-  const addAgendamento = (ag: Agendamento) => {
-    setAgendamentos(prev => [...prev, ag])
+  //Carregar Agendamentos do banco na inicialização
+  useEffect(() => {
+    const carregarAgendamentos = async () => {
+      try {
+        const agendamentosDoBanco = await listarAgendamentos();
+        setAgendamentos(agendamentosDoBanco);
+      } catch (error) {
+        console.log('❌ Erro ao carregar agendamentos do banco:', error);
+      }
+    };
 
-    //Você adicionaria a conexão do banco de dados para ADICIONAR aqui.
-  }
+    carregarAgendamentos();
+  }, []);
+// Adicionar Agendamento
+  const addAgendamento = async (ag: Agendamento) => {
+    try {
+      // Primeiro salva no banco
+      await salvarAgendamento(
+        ag.nomeCliente,
+        ag.servico,
+        ag.profissional,
+        ag.data,
+        ag.horario
+      );
+      // Depois atualiza o contexto
+      const agendamentosAtualizados = await listarAgendamentos();
+      setAgendamentos(agendamentosAtualizados);
+    } catch (error) {
+      console.log('❌ Erro ao adicionar agendamento:', error);
+    }
+  };
+
 
   //Usa uma função filter para idenficar o agendamento com ID informado.
-  const removerAgendamento = (id: number) => {
-    setAgendamentos(prev => prev.filter(ag => ag.id !== id))
+  const removerAgendamento = async (id: number) => {
+    try {
+      await removerAgendamentoPorId(id);
 
-    //Você adicionaria a conexão do banco de dados para REMOVER aqui.
-  }
+      // Atualiza o contexto
+      const agendamentosAtualizados = await listarAgendamentos();
+      setAgendamentos(agendamentosAtualizados);
+    } catch (error) {
+      console.log('❌ Erro ao remover agendamento:', error);
+    }
+  };
 
-  //Retorna tudo isso via contexto, o value possui todos os dados e funções, fazendo com que possam ser acessados em qualquer lugar ou componente, ou seja, global.
   return (
     <AgendamentoContext.Provider value={{ agendamentos, addAgendamento, removerAgendamento }}>
       {children}
     </AgendamentoContext.Provider>
-  )
-}
+  );
+};
 
 //Hook para usar esse contexto em qualquer lugar
 export const useAgendamento = () => useContext(AgendamentoContext)
