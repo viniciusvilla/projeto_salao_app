@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "app_salao",
-    "slug": "app_salao",
+    "name": "Salão App",
+    "slug": "salao-app",
     "version": "1.0.0",
-    "scheme": "app_salao",
+    "scheme": "salaoapp",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,7 +27,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-sqlite"
     ]
   }
 }

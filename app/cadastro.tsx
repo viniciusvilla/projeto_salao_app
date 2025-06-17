@@ -1,133 +1,91 @@
-// app/cadastro.tsx
+import { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { Button } from '../components/button';
+import { getDBConnection } from '../database/database';
+import { router } from 'expo-router';
 
-// Tela Cadastro
+export default function CadastroUsuario() {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [senha, setSenha] = useState('');
 
-import { SafeAreaView, StyleSheet, Image, Text, TextInput, View } from 'react-native'
-import { Button } from '../components/button'
-import { router } from 'expo-router'
-import { useState } from 'react'
-
-export default function Screen() {
-  // Estados dos inputs
-
-  //Nome, Email, Senha ficam armazenadas nas variáveis abaixo
-  const [nome, setNome] = useState("")
-  const [email, setEmail] = useState("")
-  const [senha, setSenha] = useState("")
-  const [confirmarSenha, setConfirmarSenha] = useState("")
-
-  // Aqui é a validação dos campos, vê se todos campos foram preenchido e verifica se as senhas coincidem
-  const handleCadastro = () => {
-    if (!nome || !email || !senha || !confirmarSenha) {
-      alert("Preencha todos os campos.")
-      return
+  const handleCadastro = async () => {
+    if (!nome || !email || !telefone || !senha) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      return;
     }
 
-    if (senha !== confirmarSenha) {
-      alert("As senhas não coincidem.")
-      return
+    try {
+      const db = getDBConnection();
+
+      await (await db).runAsync(
+        `INSERT INTO usuarios (nome, email, telefone, senha) VALUES (?, ?, ?, ?);`,
+        [nome, email, telefone, senha]
+      );
+
+      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
+      router.replace('/'); // Voltar para tela de login (raiz "/")
+    } catch (error) {
+      console.log('Erro ao cadastrar usuário:', error);
+      Alert.alert('Erro', 'Não foi possível cadastrar o usuário. Verifique se o email já está cadastrado.');
     }
-
-    // Caso tudo der certo, exibira essa mensagem
-    alert(`Usuário ${nome} cadastrado com sucesso!`)
-    router.replace('/') // Redireciona de volta para o login
-
-    //Os campos só serão enviados para o BD caso todos os campos sejam preenchidos, então acredito eu que você deva conectar a partir desse ponto BD nesse ponto.
-
-  }
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Image
-        source={require('../assets/salao_logo2.png')}
-        style={styles.logo}
-        resizeMode='cover'
+    <View style={styles.container}>
+      <Text style={styles.title}>Cadastro de Usuário</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
       />
-      <Text style={styles.h1}>Cadastro</Text>
-      <Text style={styles.h2}>Crie sua conta abaixo</Text>
 
-      <View style={styles.areaInput}>
-        <Text>Nome:</Text>
-        <TextInput
-          style={styles.input}
-          value={nome}
-          onChangeText={t => setNome(t)}
-        />
-      </View>
-
-      <View style={styles.areaInput}>
-        <Text>Email:</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={t => setEmail(t)}
-        />
-      </View>
-
-      <View style={styles.areaInput}>
-        <Text>Senha:</Text>
-        <TextInput
-          style={styles.input}
-          value={senha}
-          onChangeText={t => setSenha(t)}
-          secureTextEntry={true}
-        />
-      </View>
-
-      <View style={styles.areaInput}>
-        <Text>Confirmar Senha:</Text>
-        <TextInput
-          style={styles.input}
-          value={confirmarSenha}
-          onChangeText={t => setConfirmarSenha(t)}
-          secureTextEntry={true}
-        />
-      </View>
-
-      <Button
-        title="Cadastrar"
-        onPress={handleCadastro}
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
       />
-    </SafeAreaView>
-  )
+
+      <TextInput
+        style={styles.input}
+        placeholder="Telefone"
+        value={telefone}
+        onChangeText={setTelefone}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Senha"
+        secureTextEntry
+        value={senha}
+        onChangeText={setSenha}
+      />
+
+      <Button title="Cadastrar" onPress={handleCadastro} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     justifyContent: 'center',
-    alignItems: 'center'
   },
-
-  logo: {
-    width: 200,
-    height: 200,
-    marginBottom: -30
-  },
-
-  h1: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    fontFamily: 'Arial'
-  },
-
-  h2: {
-    fontSize: 16,
+  title: {
+    fontSize: 24,
     marginBottom: 20,
-    fontStyle: 'italic',
-    fontFamily: 'Arial'
+    textAlign: 'center',
   },
-
-  areaInput: {
-    marginBottom: 20
-  },
-
   input: {
-    width: 200,
-    height: 50,
-    borderWidth: 0.5,
-    borderRadius: 10,
-    paddingLeft: 10
-  }
-})
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
+  },
+});

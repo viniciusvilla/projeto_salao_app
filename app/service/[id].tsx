@@ -42,12 +42,13 @@ export default function Screen() {
 
     //Agendando o serviço em context/agendamento_context.tsx
     addAgendamento({
-    id: Date.now(), // Gera id temporário único
-    servico: service.title,
-    profissional: profissionalSelecionado,
-    dia: diaSelecionado,
-    horario: horarioSelecionado,
-  });
+      id: Date.now(), // Gera id temporário único
+      servico: service.title,
+      profissional: profissionalSelecionado,
+      data: diaSelecionado,
+      horario: horarioSelecionado,
+      nomeCliente: ""
+    });
 
     alert(`Agendado com ${profissionalSelecionado} na ${diaSelecionado} às ${horarioSelecionado}`)
     
