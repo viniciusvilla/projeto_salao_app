@@ -1,4 +1,6 @@
-import { SafeAreaView, StyleSheet, Image, Text, TextInput, View, Alert } from 'react-native';
+//index.html
+
+import { SafeAreaView, StyleSheet, Image, Text, TextInput, View, Alert, Pressable } from 'react-native';
 import { Button } from '../components/button';
 import { router } from 'expo-router';
 import { useState } from 'react';
@@ -40,6 +42,11 @@ export default function Screen() {
     router.push('/cadastro');
   };
 
+  const redefinirPress = () => {
+    router.push('/redefinir/email'); // Manda para a tela redefinir/email.tsx
+  };
+
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -72,6 +79,11 @@ export default function Screen() {
 
       <Button title="Entrar" onPress={handleLogin} />
       <Button title="Cadastrar" onPress={cadastrarPress} />
+      {/*<Button title="Esqueci a senha" onPress={redefinirPress} />*/}
+
+      <Pressable onPress = {redefinirPress}>
+        <Text style = {styles.textForget}>Esqueci a Senha 😭</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -109,4 +121,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
   },
+
+  textForget:{
+    color: 'blue',
+    textDecorationLine: 'underline',
+    fontSize: 16
+  }
 });
