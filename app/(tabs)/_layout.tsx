@@ -5,7 +5,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Text, Pressable, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage'; // Descomente quando for usar
+//import AsyncStorage from '@react-native-async-storage/async-storage'; // Descomente quando for usar
 
 export default function TabLayout() {
   const handleLogout = async () => {
@@ -21,13 +21,10 @@ export default function TabLayout() {
             // Aqui você vai limpar a sessão de quem está logado.
 
             /*
-            // Exemplo:
             await AsyncStorage.removeItem('@usuario_logado'); 
             ou
-            await AsyncStorage.clear(); // se quiser apagar tudo
+            await AsyncStorage.clear(); 
             */
-
-            //Ai ao final vai rodar o código abaixo que irá voltar para a tela de login.
 
             router.replace('/'); // Redireciona para tela de login
           },
@@ -63,6 +60,17 @@ export default function TabLayout() {
           title: 'Agenda',
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="archive" color={color} />
+          ),
+        }}
+      />
+
+      {/*  Novo Tab: Perfil */}
+      <Tabs.Screen
+        name="perfil"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={28} name="user" color={color} />
           ),
         }}
       />

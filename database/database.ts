@@ -6,7 +6,7 @@ export const getDBConnection = async () => {
   return db;
 };
 
-// ✅ SALVAR AGENDAMENTO NO BANCO
+//  SALVAR AGENDAMENTO NO BANCO
 export const salvarAgendamento = async (
   nomeCliente: string,
   servico: string,
@@ -25,15 +25,24 @@ export const salvarAgendamento = async (
   );
 };
 
-// ✅ LISTAR AGENDAMENTOS
+//  LISTAR AGENDAMENTOS
 export const listarAgendamentos = async (): Promise<any[]> => {
   const db = await getDBConnection();
   const resultado = await db.getAllAsync('SELECT * FROM agendamentos;');
   return resultado;
 };
 
-// ✅ REMOVER AGENDAMENTO POR ID
+//  REMOVER AGENDAMENTO POR ID
 export const removerAgendamentoPorId = async (id: number) => {
   const db = await getDBConnection();
   await db.runAsync('DELETE FROM agendamentos WHERE id = ?;', id);
 };
+
+//  BUSCAR DADOS DO PRIMEIRO USUÁRIO COM TIPO CORRETO
+export const buscarUsuario = async (): Promise<{ nome: string; telefone: string } | null> => {
+  const db = await getDBConnection();
+  const resultado = await db.getFirstAsync<{ nome: string; telefone: string }>('SELECT nome, telefone FROM usuarios LIMIT 1;');
+  return resultado ?? null;
+};
+
+
