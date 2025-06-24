@@ -1,3 +1,5 @@
+//cadastro.tsx
+
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button } from '../components/button';

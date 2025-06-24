@@ -1,7 +1,14 @@
+//perfil.tsx
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+<<<<<<< Updated upstream
 import * as ImagePicker from 'expo-image-picker';
 import { buscarUsuario, atualizarImagemUsuario } from '../../database/database';
+=======
+import * as ImagePicker from 'expo-image-picker'; 
+import { buscarUsuario } from '../../database/database'; 
+>>>>>>> Stashed changes
 
 export default function Perfil() {
   const [nome, setNome] = useState('');
