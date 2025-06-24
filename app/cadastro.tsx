@@ -5,7 +5,7 @@ import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button } from '../components/button';
 import { getDBConnection } from '../database/database';
 import { router } from 'expo-router';
-import * as Crypto from 'expo-crypto';
+import * as Crypto from 'expo-crypto'; // essa linha ta dando erro
 
 export default function CadastroUsuario() {
   const [nome, setNome] = useState('');

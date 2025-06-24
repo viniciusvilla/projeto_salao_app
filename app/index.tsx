@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
-=======
-//index.tsx
 
->>>>>>> Stashed changes
+//index.tsx
 import { SafeAreaView, StyleSheet, Image, Text, TextInput, View, Alert, Pressable } from 'react-native';
 import { Button } from '../components/button';
 import { router } from 'expo-router';
