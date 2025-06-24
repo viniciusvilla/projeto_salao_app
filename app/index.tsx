@@ -1,10 +1,9 @@
-//index.html
-
 import { SafeAreaView, StyleSheet, Image, Text, TextInput, View, Alert, Pressable } from 'react-native';
 import { Button } from '../components/button';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { getDBConnection } from '../database/database'; // usa sua conexão
+import { getDBConnection } from '../database/database';
+import * as Crypto from 'expo-crypto';
 
 export default function Screen() {
   const [email, setEmail] = useState('');
@@ -19,15 +18,20 @@ export default function Screen() {
     try {
       const db = await getDBConnection();
 
+      const senhaCriptografada = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        senha
+      );
+      console.log('Tentando login com email:', email);
+      console.log('Senha criptografada digitada:', senhaCriptografada);
+
       const results = await db.getAllAsync(
         `SELECT * FROM usuarios WHERE email = ? AND senha = ? AND tipo = ?`,
-        [email, senha, 'usuario'] // somente usuário comum
+        [email, senhaCriptografada, 'usuario']
       );
 
       if (results.length > 0) {
         const usuario = results[0];
-
-        // Redireciona para a tela de perfil
         router.replace('/home');
       } else {
         Alert.alert('Erro', 'Usuário ou senha inválidos');
@@ -43,17 +47,13 @@ export default function Screen() {
   };
 
   const redefinirPress = () => {
-    router.push('/redefinir/email'); // Manda para a tela redefinir/email.tsx
+    router.push('/redefinir/email');
   };
 
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={require('../assets/salao_logo2.png')}
-        style={styles.logo}
-        resizeMode="cover"
-      />
+      <Image source={require('../assets/salao_logo2.png')} style={styles.logo} resizeMode="cover" />
       <Text style={styles.h1}>Salão RE Santos</Text>
       <Text style={styles.h2}>Cabelo bonito nos traz felicidade</Text>
 
@@ -79,52 +79,22 @@ export default function Screen() {
 
       <Button title="Entrar" onPress={handleLogin} />
       <Button title="Cadastrar" onPress={cadastrarPress} />
-      {/*<Button title="Esqueci a senha" onPress={redefinirPress} />*/}
 
-      <Pressable onPress = {redefinirPress}>
-        <Text style = {styles.textForget}>Esqueci a Senha 😭</Text>
+      <Pressable onPress={redefinirPress}>
+        <Text style={styles.textForget}>Esqueci a Senha 😭</Text>
       </Pressable>
     </SafeAreaView>
+    
   );
+
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logo: {
-    width: 200,
-    height: 200,
-    marginBottom: -30,
-  },
-  h1: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    fontFamily: 'Arial',
-  },
-  h2: {
-    fontSize: 16,
-    marginBottom: 20,
-    fontStyle: 'italic',
-    fontFamily: 'Arial',
-  },
-  areaInput: {
-    marginBottom: 30,
-  },
-  input: {
-    width: 200,
-    height: 50,
-    borderWidth: 0.5,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-  },
-
-  textForget:{
-    color: 'blue',
-    textDecorationLine: 'underline',
-    fontSize: 16
-  }
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  logo: { width: 200, height: 200, marginBottom: -30 },
+  h1: { fontSize: 22, fontWeight: 'bold', marginBottom: 10, fontFamily: 'Arial' },
+  h2: { fontSize: 16, marginBottom: 20, fontStyle: 'italic', fontFamily: 'Arial' },
+  areaInput: { marginBottom: 30 },
+  input: { width: 200, height: 50, borderWidth: 0.5, borderRadius: 10, paddingHorizontal: 10 },
+  textForget: { color: 'blue', textDecorationLine: 'underline', fontSize: 16 }
 });

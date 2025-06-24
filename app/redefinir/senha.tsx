@@ -12,6 +12,8 @@ import { Button } from '../../components/button';
 import { useState } from 'react';
 import { getDBConnection } from '../../database/database';
 import { router } from 'expo-router';
+import * as Crypto from 'expo-crypto';
+
 
 import { useLocalSearchParams } from 'expo-router';
 
@@ -35,9 +37,14 @@ export default function Screen() {
     //Aqui faria a mudança da senha no banco de dados, deixei +/- como seria.
     try {
       const db = await getDBConnection();
+      const senhaCriptografada = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256,
+            senha
+      );
+      console.log('Senha redefinida criptografada:', senhaCriptografada);
       await db.runAsync(
         `UPDATE usuarios SET senha = ? WHERE email = ?`,
-        [senha, emailString]
+        [senhaCriptografada, emailString]
       );
 
       Alert.alert('Sucesso', 'Senha redefinida com sucesso!');

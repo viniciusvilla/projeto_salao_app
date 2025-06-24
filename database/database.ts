@@ -3,6 +3,9 @@ import * as SQLite from 'expo-sqlite';
 // Abre a conexão com o banco
 export const getDBConnection = async () => {
   const db = await SQLite.openDatabaseAsync('salao.db');
+  if (!db) {
+    throw new Error('Erro ao abrir o banco de dados: conexão nula');
+  }
   return db;
 };
 
