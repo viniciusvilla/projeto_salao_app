@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { buscarUsuario } from '../../database/database'; 
+import { buscarUsuario, atualizarImagemUsuario } from '../../database/database';
 
 export default function Perfil() {
   const [nome, setNome] = useState('');
@@ -15,6 +15,9 @@ export default function Perfil() {
         if (usuario) {
           setNome(usuario.nome);
           setTelefone(usuario.telefone);
+          if (usuario.imagem) {
+            setImageUri(usuario.imagem); // carrega imagem salva
+          }
         }
       } catch (err) {
         console.error('Erro ao carregar usuário:', err);
@@ -33,7 +36,9 @@ export default function Perfil() {
     });
 
     if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);
+      const uri = result.assets[0].uri;
+      setImageUri(uri);
+      await atualizarImagemUsuario(uri); // salva no banco
     }
   };
 
@@ -49,13 +54,11 @@ export default function Perfil() {
         )}
       </TouchableOpacity>
 
-      {/* Nome */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Nome:</Text>
         <Text style={styles.value}>{nome}</Text>
       </View>
 
-      {/* Telefone */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Telefone:</Text>
         <Text style={styles.value}>{telefone}</Text>
